@@ -1,0 +1,45 @@
+## %%
+# Import modules
+import numpy
+
+# %%
+# Load data and set cols
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+data = pandas.read_csv(url, names=names)
+
+# %%
+
+# Evaluate a model using Cross Validation
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+
+# create numpy array from dataframe
+array = data.values
+# separate array into input and output components
+X = array[:,0:8]
+Y = array[:,8]
+
+kfold = KFold(n_splits=10, random_state=7, shuffle=True)
+model = LogisticRegression(solver='liblinear')
+kfold_results = cross_val_score(model, X, Y, cv=kfold)
+print("Accuracy: %.3f%% (%.3f%%)" % (kfold_results.mean()*100.0, kfold_results.std()*100.0))
+# %%
+# Evaluate a model using Leave One Out Cross Validation (LOOCV)
+from sklearn.model_selection import LeaveOneOut
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+
+# create numpy array from dataframe
+array = data.values
+# separate array into input and output components
+X = array[:,0:8]
+Y = array[:,8]
+
+loocv = LeaveOneOut()
+model = LogisticRegression(solver='liblinear')
+loocv_results = cross_val_score(model, X, Y, cv=loocv)
+print("Accuracy: %.3f%% (%.3f%%)" % (loocv_results.mean()*100.0, loocv_results.std()*100.0))
